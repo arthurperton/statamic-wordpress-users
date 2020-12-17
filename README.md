@@ -23,7 +23,10 @@ Using the WordPress Users addon for Statamic is easy. All steps can be done from
 
 ## License
 WordPress Users is **commercial software** but has an open-source codebase. If you want to use it in production, you'll need to [buy a license from the Statamic Marketplace](https://statamic.com/addons/arthurperton/wordpress-users).
+
 >WordPress Users is **NOT** free software.
+
+Please feel free to try out the import process in your local development environment though before buying a license.
 
 ## Credits
 Developed by [Arthur Perton](https://www.webenapp.nl)
