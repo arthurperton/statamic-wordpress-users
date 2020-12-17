@@ -13,7 +13,6 @@ With this Statamic addon you can import your WordPress users and let them log in
 * The addon can be safely uninstalled after all users have logged in once
 
 ## How To
-
 ### Installation
 
 You can install the addon using composer
@@ -22,11 +21,11 @@ You can install the addon using composer
  
  or you can just browse to the addon in the Control Panel and click install.
 
-### Where to find it
+### Where to Find It
 
 Once installed, you will find the *WordPress Users* menu item under the *Users* section in the Control Panel. 
 
-The addon is visible to superuser only by default. If you also like some regular users to access the addon too, you can do so. There is a permission available for that.
+The addon is visible to superuser only by default. If you also like regular users to access the addon too, you can do so. There is a permission available for that.
 
 ### Export Users From WordPress
 
@@ -36,7 +35,7 @@ The easiest way to export your users is using  [this free plugin](https://wordpr
 
 Upload the CSV export file you just created.
 
-### Import – Step 2 (optional)
+### Import – Step 2
 
 Configure the fields. If you used the recommended plugin, these should be filled in correctly for you already.
 
@@ -46,11 +45,13 @@ Configure the way user roles are imported. For each WordPress role you can selec
 
 ### Now Click the Import Button!
 
-If any of the users cannot not be imported, you'll see the details. You can then either cancel the import or continue.
+The users will be imported right away. 
+
+If any of the users cannot not be imported (because their email address is already in use for example) you can review the details first before continuing.
 
 ### Report
 
-After the import you'll see a report of the number of users that were succesfully imported. You'll also see how many of these users have logged in already.
+After the import you'll see a report with the number of users that were succesfully imported. It also shows the number of users that have logged in into their new account already.
 
 You can always import more users later on if you want to.
 
