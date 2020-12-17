@@ -1,5 +1,14 @@
 {
     "name": "arthurperton/wordpress-users",
+    "license": "proprietary",
+    "type": "statamic-addon",
+    "authors": [
+        {
+            "name": "Arthur Perton",
+            "email": "arthur@webenapp.nl",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "hautelook/phpass": "^1.1",
         "parsecsv/php-parsecsv": "^1.2"
@@ -11,8 +20,8 @@
     },
     "extra": {
         "statamic": {
-            "name": "Wordpress Authenticator",
-            "description": "Wordpress Authenticator addon"
+            "name": "WordPress Users",
+            "description": "WordPress Users addon"
         },
         "laravel": {
             "providers": [
