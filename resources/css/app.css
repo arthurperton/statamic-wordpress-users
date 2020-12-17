@@ -1,0 +1,15 @@
+.wordpress-users-grid .row-controls,
+.wordpress-users-grid .grid-item-header button,
+.wordpress-users-grid button.btn {
+    display: none !important;
+}
+
+.wordpress-users-reminder {
+    display: none;
+
+    transition: height 1s;
+}
+
+.no-row-hover tr {
+    background-color: inherit !important;
+}

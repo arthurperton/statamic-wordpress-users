@@ -1,0 +1,23 @@
+{
+    "name": "arthurperton/wordpress-users",
+    "require": {
+        "hautelook/phpass": "^1.1",
+        "parsecsv/php-parsecsv": "^1.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Statamic\\Addons\\WordpressUsers\\": "src"
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Wordpress Authenticator",
+            "description": "Wordpress Authenticator addon"
+        },
+        "laravel": {
+            "providers": [
+                "Statamic\\Addons\\WordpressUsers\\ServiceProvider"
+            ]
+        }
+    }
+}
