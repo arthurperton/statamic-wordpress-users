@@ -18,7 +18,7 @@ The addon is visible to superusers only by default. If you also like regular use
 
 ## Export Users From WordPress
 
-The easiest way to export your users is using  [this free plugin](https://wordpress.org/plugins/import-users-from-csv-with-meta/). After you've installed it, just go the Export tab and click download.
+The easiest way to export your users from your WordPress website is using [this free plugin](https://wordpress.org/plugins/import-users-from-csv-with-meta/). After you've installed it, just go the Export tab and click download.
 
 ## Import
 
@@ -26,7 +26,7 @@ You'll be guided through the import in three steps.
 
 ### Import – Step 1
 
-Upload the CSV export file you just created.
+Upload the CSV export file you just downloaded from your WordPress website.
 
 ### Import – Step 2
 
@@ -47,3 +47,11 @@ If any of the users cannot not be imported (because their email address is alrea
 After the import you'll see a report with the number of users that were succesfully imported. It also shows the number of users that have logged in into their new account already.
 
 You can always import more users later on if you want to.
+
+## Users
+
+The users will be visible as regular Statamic users. 
+
+In fact they are regular Statamic users, just their passwords are still stored in the WordPress format. They can log in using their WordPress email and password. This password will be converted to the Statamic format on first login. 
+
+You can safely uninstall the addon after all users have logged in once.
