@@ -9,7 +9,7 @@ This addon lets you import WordPress users so they can log in with their origina
 * Import your WordPress users into Statamic
 * Users can log in with their original passwords right away
 * Optionally map roles to Statamic roles and groups
-* Full passwords conversion on first login
+* Automatic password conversion on first login
 * The addon can be safely uninstalled after all users have logged in once
 
 ## Documentation
@@ -25,8 +25,6 @@ Using the WordPress Users addon for Statamic is easy. All steps can be done from
 WordPress Users is **commercial software** but has an open-source codebase. If you want to use it in production, you'll need to [buy a license from the Statamic Marketplace](https://statamic.com/addons/arthurperton/wordpress-users).
 
 >WordPress Users is **NOT** free software.
-
-Please feel free to try out the import process in your local development environment though before buying a license.
 
 ## Credits
 Developed by [Arthur Perton](https://www.webenapp.nl)
