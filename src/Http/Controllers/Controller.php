@@ -325,7 +325,7 @@ class Controller extends BaseController
         $csv->load_data($asset->disk()->get($asset->path()));
 
         if (! $csv->auto()) {
-            throw new CsvFileException('Unable to parse CSV file.');
+            throw new CsvFileException('Unable to parse the users CSV file.');
         }
 
         Cache::put($this->getCacheKey(self::KEY_CSV), $csv, now()->addMinutes(15));
@@ -358,11 +358,11 @@ class Controller extends BaseController
             $asset = empty($asset) ? null : $asset[0];
         }
         if (! $asset) {
-            throw new CsvFileException('Users file not set.');
+            throw new CsvFileException('Users CSV file not set.');
         }
         $asset = Asset::find($asset);
         if (! $asset) {
-            throw new CsvFileException('Users file asset not found.');
+            throw new CsvFileException('Users CSV file asset not found.');
         }
 
         return $asset;
