@@ -6,10 +6,10 @@ With this Statamic addon you can import your WordPress users and let them log in
 
 ## Features
 
-* Import your WordPress users from a [CSV export file](https://wordpress.org/plugins/import-users-from-csv-with-meta/)
-* Users can log in with their original passwords
+* Import your WordPress users into Statamic
+* Users can log in with their original passwords right away
 * Optionally map roles to Statamic roles and groups
-* Passwords conversion is completed on first login
+* Full passwords conversion on first login
 * The addon can be safely uninstalled after all users have logged in once
 
 ## How To
