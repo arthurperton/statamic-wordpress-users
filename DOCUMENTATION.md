@@ -52,6 +52,6 @@ You can always import more users later on if you want to.
 
 The users will be visible as regular Statamic users. 
 
-In fact they are regular Statamic users, just their passwords are still stored in the WordPress format. They can log in using their WordPress email and password. This password will be converted to the Statamic format on first login. 
+In fact they are regular Statamic users, just their passwords are still stored in the WordPress format. They can log in using their WordPress email and password. This password will magically be converted to the Statamic format on first login. 
 
 You can safely uninstall the addon after all users have logged in once.
