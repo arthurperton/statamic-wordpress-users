@@ -16,6 +16,10 @@ This addon lets you import WordPress users so they can log in with their origina
 
 Using the WordPress Users addon for Statamic is easy. All steps can be done from the browser. You'll probaly won't even need to read the [instructions](https://statamic.com/addons/arthurperton/wordpress-users/docs).
 
+## Support
+
+If you run into any issues you can [report a bug](https://github.com/arthurperton/statamic-wordpress-users/issues) on GitHub to help improve this addon. Please check if a similar issue already exists before reporting yours.
+
 ## Requirements
 
 * Statamic v3
