@@ -30,5 +30,7 @@ WordPress Users is **commercial software** but has an open-source codebase. If y
 
 >WordPress Users is **NOT** free software.
 
+Please support the developer and play fair. Feel free to try WordPress Users in your local development environment first to see if the import works out for you.
+
 ## Credits
 Developed by [Arthur Perton](https://www.webenapp.nl)
