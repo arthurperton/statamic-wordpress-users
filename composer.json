@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "hautelook/phpass": "^1.1",
+        "bordoni/phpass": "dev-main",
         "parsecsv/php-parsecsv": "^1.2"
     },
     "autoload": {
