@@ -3,13 +3,13 @@
 namespace Statamic\Addons\WordpressUsers\Http\Controllers;
 
 use App\Http\Controllers\Controller as BaseController;
-use Exception;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use ParseCsv\Csv;
 use Statamic\Addons\WordpressUsers\Exceptions\CsvFileException;
 use Statamic\Contracts\Assets\Asset as AssetContract;
 use Statamic\Facades\Asset;
+use Statamic\Facades\AssetContainer;
 use Statamic\Facades\Blueprint;
 use Statamic\Facades\User;
 use Statamic\Licensing\LicenseManager as Licenses;
@@ -17,9 +17,13 @@ use Statamic\Licensing\LicenseManager as Licenses;
 class Controller extends BaseController
 {
     private const PACKAGE_NAME = 'arthurperton/wordpress-users';
+
     private const PERMISSION = 'access wordpress-users addon';
+
     private const KEY_CSV = 'csv';
+
     private const KEY_CSV_HASH = 'csv-hash';
+
     private const KEY_CONFIG = 'config';
 
     public function index()
@@ -54,11 +58,11 @@ class Controller extends BaseController
             $fields = $blueprint->fields()->addValues($values)->preProcess();
 
             return view('wordpress-users::import', [
-                'step'      => $step,
+                'step' => $step,
                 'stepcount' => 3,
                 'blueprint' => $blueprint->toPublishArray(),
-                'values'    => $fields->values(),
-                'meta'      => $fields->meta(),
+                'values' => $fields->values(),
+                'meta' => $fields->meta(),
             ]);
         } catch (CsvFileException $e) {
             // $this->configPut('file', null);
@@ -70,7 +74,7 @@ class Controller extends BaseController
     public function update(Request $request, $step)
     {
         $this->authorize(self::PERMISSION);
-        
+
         $patch = $request->all();
 
         $fields = $this->getBlueprint($step)->fields()->addValues($patch);
@@ -116,13 +120,13 @@ class Controller extends BaseController
             })
             ->map(function ($user, $i) use (&$errors, $rows) {
                 $problems = [];
-                if (!isset($user['email'])) {
+                if (! isset($user['email'])) {
                     $problems[] = 'email address is missing';
                 }
-                if (!isset($user['name'])) {
+                if (! isset($user['name'])) {
                     $problems[] = 'name is missing';
                 }
-                if (!isset($user['wp__password_hash'])) {
+                if (! isset($user['wp__password_hash'])) {
                     $problems[] = 'password hash is missing';
                 }
                 if (User::findByEmail($user['email'])) {
@@ -131,8 +135,8 @@ class Controller extends BaseController
                 if ($problems) {
                     $errors->push([
                         'user' => ($user['name'] ?? 'NO NAME').' ('.($user['email'] ?? 'NO EMAIL').')',
-                        'message' => join(', ', $problems),
-                        'row' => join(', ', $rows[$i]),
+                        'message' => implode(', ', $problems),
+                        'row' => implode(', ', $rows[$i]),
                     ]);
                 }
 
@@ -141,6 +145,7 @@ class Controller extends BaseController
 
         if ($errors->count() > 0 && ! $request->query('force', false)) {
             $userCount = $users->count();
+
             return view('wordpress-users::review', compact('errors', 'userCount'));
         }
 
@@ -190,12 +195,21 @@ class Controller extends BaseController
         $sections = [];
 
         if ($step == 1) {
+            $container = config('statamic.wordpress_users.asset_container') ?? AssetContainer::all()->first()->handle();
+
             $sections = [
                 'fields' => [
                     'display' => 'File Upload',
                     'instructions' => 'Please provide your CSV export file below. You can export your users from WordPress with a free plugin like <a href="https://wordpress.org/plugins/import-users-from-csv-with-meta/" target="_blank" rel="noopener noreferrer">this one</a>.',
                     'fields' => [
-                        'file' => ['type' => 'assets', 'display' => 'Users File', 'instructions' => 'Please select your .csv file.', 'max_files' => 1, 'required' => true],
+                        'file' => [
+                            'type' => 'assets',
+                            'display' => 'Users File',
+                            'instructions' => 'Please select your .csv file.',
+                            'container' => $container,
+                            'max_files' => 1,
+                            'required' => true,
+                        ],
                     ],
                 ],
             ];
@@ -225,7 +239,7 @@ class Controller extends BaseController
                                     'options' => array_combine($this->csv()->titles, $this->csv()->titles),
                                     'required' => true,
                                 ]],
-                            ]
+                            ],
                         ],
                     ],
                 ],
@@ -245,7 +259,7 @@ class Controller extends BaseController
                                 ['handle' => 'wp_role', 'field' => ['type' => 'text', 'display' => 'WordPress Role', 'read_only' => true]],
                                 ['handle' => 'roles', 'field' => ['type' => 'user_roles', 'display' => 'Roles']],
                                 ['handle' => 'groups', 'field' => ['type' => 'user_groups', 'display' => 'Groups']],
-                            ]
+                            ],
                         ],
                     ],
                 ],
@@ -262,25 +276,24 @@ class Controller extends BaseController
         if ($step == 2) {
             $columns = collect($this->csv()->titles);
 
-            $values = ['field_mapping' =>
-                collect([
-                    ['handle' => 'name', 'title' => 'Name', 'column' => ['display_name', 'nickname']],
-                    ['handle' => 'email', 'title' => 'Email Address', 'column' => ['user_email', 'email']],
-                    ['handle' => 'wp__password_hash', 'title' => 'Password Hash', 'column' => ['user_pass', 'user_password', 'password']],
-                    ['handle' => 'wp__id', 'title' => 'User ID', 'column' => ['source_user_id', 'user_id', 'id']],
-                    ['handle' => 'roles', 'title' => 'Role', 'column' => ['role', 'user_role']],
-                ])->map(function ($value) use ($columns) {
-                    $value['column'] = collect($value['column'])->first(function ($column) use ($columns) {
-                        return $columns->contains($column);
-                    });
-                    return $value;
-                })->all()
+            $values = ['field_mapping' => collect([
+                ['handle' => 'name', 'title' => 'Name', 'column' => ['display_name', 'nickname']],
+                ['handle' => 'email', 'title' => 'Email Address', 'column' => ['user_email', 'email']],
+                ['handle' => 'wp__password_hash', 'title' => 'Password Hash', 'column' => ['user_pass', 'user_password', 'password']],
+                ['handle' => 'wp__id', 'title' => 'User ID', 'column' => ['source_user_id', 'user_id', 'id']],
+                ['handle' => 'roles', 'title' => 'Role', 'column' => ['role', 'user_role']],
+            ])->map(function ($value) use ($columns) {
+                $value['column'] = collect($value['column'])->first(function ($column) use ($columns) {
+                    return $columns->contains($column);
+                });
+
+                return $value;
+            })->all(),
             ];
         } elseif ($step == 3) {
-            $values = ['role_mapping' =>
-                collect($this->csv()->data)->pluck('role')->unique()->sort()->values()->map(function ($role) {
-                    return ['wp_role' => $role];
-                })->all()
+            $values = ['role_mapping' => collect($this->csv()->data)->pluck('role')->unique()->sort()->values()->map(function ($role) {
+                return ['wp_role' => $role];
+            })->all(),
             ];
         }
 

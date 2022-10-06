@@ -55,3 +55,20 @@ The users will be visible as regular Statamic users.
 In fact they are regular Statamic users, just their passwords are still stored in the WordPress format. They can log in using their WordPress email and password. This password will magically be converted to the Statamic format on first login. 
 
 You can safely uninstall the addon after all users have logged in once.
+
+## Configure Asset Container
+
+Your uploaded CSV file is stored as an asset, so you can retry or continue your import later on. 
+
+If you have multiple asset containers, it will use the first container by default. Alternatively, you can configure the container in which the asset is stored. 
+
+To configure the container just add a configuration file at `config/statamic/wordpress_users.php` and set the `asset_container` option like so:
+
+```php
+<?php
+
+return [
+    'asset_container' => 'your_container_handle',
+];
+
+```
