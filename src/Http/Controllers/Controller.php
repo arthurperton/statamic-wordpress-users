@@ -104,7 +104,15 @@ class Controller extends BaseController
 
         $csv = $this->csv();
 
-        $field_mapping = collect($this->configGet('field_mapping'));
+        $extra_fields = collect($this->configGet('field_mapping_extra'))->map(function ($field) {
+            if (! is_string($field['handle']) || strlen($field['handle']) === 0) {
+                $field['handle'] = $field['column'];
+            }
+
+            return $field;
+        });
+
+        $field_mapping = collect($this->configGet('field_mapping'))->merge($extra_fields);
 
         $role_mapping = collect($this->configGet('role_mapping'));
 
@@ -200,7 +208,7 @@ class Controller extends BaseController
             $sections = [
                 'fields' => [
                     'display' => 'File Upload',
-                    'instructions' => 'Please provide your CSV export file below. You can export your users from WordPress with a free plugin like <a href="https://wordpress.org/plugins/import-users-from-csv-with-meta/" target="_blank" rel="noopener noreferrer">this one</a>.',
+                    'instructions' => 'Please upload your CSV export file here. You can export your WordPress users using a free plugin like <a href="https://wordpress.org/plugins/import-users-from-csv-with-meta/" target="_blank" rel="noopener noreferrer">this one</a>.',
                     'fields' => [
                         'file' => [
                             'type' => 'assets',
@@ -217,14 +225,21 @@ class Controller extends BaseController
             $sections = [
                 'fields' => [
                     'display' => 'Field Mapping',
-                    'instructions' => 'Configure which columns to use for the required user fields. When you used the recommended plugin for the export, these should be filled in correctly for you already.',
+                    'instructions' => 'You can now specify how the data will be imported.',
                     'fields' => [
                         'field_mapping' => [
                             'type' => 'grid',
-                            'display' => 'Field Mapping',
+                            'display' => 'Required Fields',
+                            'instructions' => 'If you used the recommended plugin for the export, these should have already been filled in for you.',
                             'classes' => 'wordpress-users-grid',
                             'reorderable' => false,
                             'fields' => [
+                                ['handle' => 'column', 'field' => [
+                                    'type' => 'select',
+                                    'display' => 'CSV Column',
+                                    'options' => array_combine($this->csv()->titles, $this->csv()->titles),
+                                    'required' => true,
+                                ]],
                                 ['handle' => 'handle', 'field' => [
                                     'type' => 'hidden',
                                 ]],
@@ -233,11 +248,24 @@ class Controller extends BaseController
                                     'display' => 'User Field',
                                     'read_only' => true,
                                 ]],
+                            ],
+                        ],
+                        'field_mapping_extra' => [
+                            'type' => 'grid',
+                            'display' => 'Custom Fields',
+                            'instructions' => 'You can also import custom data if you want.',
+                            'fields' => [
                                 ['handle' => 'column', 'field' => [
                                     'type' => 'select',
                                     'display' => 'CSV Column',
                                     'options' => array_combine($this->csv()->titles, $this->csv()->titles),
                                     'required' => true,
+                                ]],
+                                ['handle' => 'handle', 'field' => [
+                                    'type' => 'text',
+                                    'display' => 'Rename (optional)',
+                                    'options' => array_combine($this->csv()->titles, $this->csv()->titles),
+                                    'required' => false,
                                 ]],
                             ],
                         ],
@@ -276,24 +304,26 @@ class Controller extends BaseController
         if ($step == 2) {
             $columns = collect($this->csv()->titles);
 
-            $values = ['field_mapping' => collect([
-                ['handle' => 'name', 'title' => 'Name', 'column' => ['display_name', 'nickname']],
-                ['handle' => 'email', 'title' => 'Email Address', 'column' => ['user_email', 'email']],
-                ['handle' => 'wp__password_hash', 'title' => 'Password Hash', 'column' => ['user_pass', 'user_password', 'password']],
-                ['handle' => 'wp__id', 'title' => 'User ID', 'column' => ['source_user_id', 'user_id', 'id']],
-                ['handle' => 'roles', 'title' => 'Role', 'column' => ['role', 'user_role']],
-            ])->map(function ($value) use ($columns) {
-                $value['column'] = collect($value['column'])->first(function ($column) use ($columns) {
-                    return $columns->contains($column);
-                });
+            $values = [
+                'field_mapping' => collect([
+                    ['handle' => 'name', 'title' => 'Name', 'column' => ['display_name', 'nickname']],
+                    ['handle' => 'email', 'title' => 'Email address', 'column' => ['user_email', 'email']],
+                    ['handle' => 'wp__password_hash', 'title' => 'Password hash', 'column' => ['user_pass', 'user_password', 'password']],
+                    ['handle' => 'wp__id', 'title' => 'WordPress user ID', 'column' => ['source_user_id', 'user_id', 'id']],
+                    ['handle' => 'roles', 'title' => 'Role', 'column' => ['role', 'user_role']],
+                ])->map(function ($value) use ($columns) {
+                    $value['column'] = collect($value['column'])->first(function ($column) use ($columns) {
+                        return $columns->contains($column);
+                    });
 
-                return $value;
-            })->all(),
+                    return $value;
+                })->all(),
             ];
         } elseif ($step == 3) {
-            $values = ['role_mapping' => collect($this->csv()->data)->pluck('role')->unique()->sort()->values()->map(function ($role) {
-                return ['wp_role' => $role];
-            })->all(),
+            $values = [
+                'role_mapping' => collect($this->csv()->data)->pluck('role')->unique()->sort()->values()->map(function ($role) {
+                    return ['wp_role' => $role];
+                })->all(),
             ];
         }
 
