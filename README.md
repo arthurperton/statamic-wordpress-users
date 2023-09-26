@@ -2,7 +2,7 @@
 ![Statamic](https://flat.badgen.net/badge/Statamic/3.0+/FF269E)
 
 # WordPress Users - Statamic addon
-This addon lets you import WordPress users so they can log in with their original passwords.
+This addon lets you import WordPress users so they can log in with their original passwords. You can use it with both Statamic v3 and v4.
 
 ## Features
 
@@ -14,7 +14,7 @@ This addon lets you import WordPress users so they can log in with their origina
 
 ## Documentation
 
-Using the WordPress Users addon for Statamic is easy. All steps can be done from the browser. You'll probaly won't even need to read the [instructions](https://statamic.com/addons/arthurperton/wordpress-users/docs).
+Using the WordPress Users addon for Statamic is easy. All steps can be done from the browser. You'll probably won't even need to read the [instructions](https://statamic.com/addons/arthurperton/wordpress-users/docs).
 
 ## Support
 
@@ -22,7 +22,7 @@ If you run into any issues you can [report a bug](https://github.com/arthurperto
 
 ## Requirements
 
-* Statamic v3
+* Statamic v3+
 * PHP 7.4+
 
 ## License
