@@ -1,34 +1,30 @@
 Statamic.$components.register('wordpress-users-import-form', {
     template: `
-        <publish-container
-            v-if="blueprint"
-            ref="container"
-            name="import"
-            reference="import"
-            :blueprint="blueprint"
-            :values="values"
-            :meta="meta"
-            :errors="errors"
-            @updated="values = $event"
-        >
-            <div slot-scope="{ setFieldValue, setFieldMeta }">
-                <configure-sections
-                    @updated="setFieldValue"
-                    @meta-updated="setFieldMeta"
-                    :enable-sidebar="false"/>
+        <div>
 
-                <div class="py-2 border-t flex justify-between">
-                    <a :href="cancelUrl" class="btn">Cancel</a>
-                    <div class="inline-flex">
-                        <button v-if="previousUrl" type="submit" class="btn-primary mr-2" @click="() => submit(false)">{{ previousText }}</button>
-                        <button type="submit" class="btn-primary" @click="submit">{{ nextText }}</button>
-                    </a>
-                </div>
+            <publish-form
+                ref="publishForm"
+                :title="title"
+                :blueprint="blueprint"
+                :values="initialValues"
+                :meta="meta"
+                :action="url"
+                method="patch"
+                @saved="onSaved"
+            ></publish-form>
+
+            <div class="py-2 border-t flex justify-between">
+                <a :href="cancelUrl" class="btn-wp-users btn">Cancel</a>
+                <div class="inline-flex">
+                    <button v-if="previousUrl" type="submit" class="btn-wp-users btn-primary mr-2" @click="previous">{{ previousText }}</button>
+                    <button type="submit" class="btn-wp-users btn-primary" @click="next">{{ nextText }}</button>
+                </a>
             </div>
-        </publish-container>
+        </div>
     `,
 
     props: {
+        title: String,
         blueprint: Object,
         cancelUrl: String,
         initialValues: Object,
@@ -40,46 +36,28 @@ Statamic.$components.register('wordpress-users-import-form', {
         url: String,
     },
 
-    data: function() {
+    data() {
         return {
-            values: this.initialValues,
-            error: null,
-            errors: {},
+            button: undefined,
         }
     },
 
     methods: {
-
-        clearErrors() {
-            this.error = null;
-            this.errors = {};
+        previous() {
+            this.button = 'previous'
+            this.$refs.publishForm.submit()
         },
 
-        submit(next = true) {
-            this.saving = true;
-            this.clearErrors();
-
-            this.$axios.patch(this.url, this.values).then(response => {
-                this.saving = false;
-                this.$refs.container.saved();
-                this.$nextTick(() => window.location = next ? this.nextUrl : this.previousUrl);
-            }).catch(e => this.handleAxiosError(e));
+        next() {
+            this.button = 'next'
+            this.$refs.publishForm.submit()
         },
 
-        handleAxiosError(e) {
-            this.saving = false;
-            if (e.response && e.response.status === 422) {
-                const { message, errors } = e.response.data;
-                this.error = message;
-                this.errors = errors;
-                this.$toast.error(message);
-            } else {
-                console.log(e);
-                this.$toast.error(__('Something went wrong'));
-            }
+        onSaved() {
+            this.$nextTick(() => window.location = this.button === 'previous' ? this.previousUrl : this.nextUrl);
         },
-        
     },
+
 })
 
 Statamic.booting(function () {

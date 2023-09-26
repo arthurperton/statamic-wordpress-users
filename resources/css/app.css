@@ -13,3 +13,5 @@
 .no-row-hover tr {
     background-color: inherit !important;
 }
+
+button[type=submit]:not(.btn-wp-users) { display: none; } 

@@ -3,14 +3,11 @@
 
 @section('content')
     
-    <header class="mb-3">
-        <h1>{{ 'Import Users – Step '.$step.' of '.$stepcount }}</h1>
-    </header>
-
     <wordpress-users-import-form
         :blueprint="{{ json_encode($blueprint) }}"
         :initial-values="{{ json_encode($values) }}"
         :meta="{{ json_encode($meta) }}"
+        title="{{ 'Import WordPress Users – Step '.$step.' of '.$stepcount }}"
         url="{{ cp_route('wordpress-users.update', $step) }}"
         cancel-url="{{ cp_route('wordpress-users.index') }}"
         previous-url="{{ $step > 1 ? cp_route('wordpress-users.edit', $step - 1) : null }}" 

@@ -200,101 +200,101 @@ class Controller extends BaseController
 
     private function getBlueprint($step)
     {
-        $sections = [];
+        $fields = [];
 
         if ($step == 1) {
             $container = config('statamic.wordpress_users.asset_container') ?? AssetContainer::all()->first()->handle();
 
-            $sections = [
-                'fields' => [
+            $fields = [
+                'section' => [
+                    'type' => 'section',
                     'display' => 'File Upload',
-                    'instructions' => 'Please upload your CSV export file here. You can export your WordPress users using a free plugin like <a href="https://wordpress.org/plugins/import-users-from-csv-with-meta/" target="_blank" rel="noopener noreferrer">this one</a>.',
-                    'fields' => [
-                        'file' => [
-                            'type' => 'assets',
-                            'display' => 'Users File',
-                            'instructions' => 'Please select your .csv file.',
-                            'container' => $container,
-                            'max_files' => 1,
-                            'required' => true,
-                        ],
-                    ],
+                    'instructions' => 'Please select or upload your CSV export file here. You can export your WordPress users using a free plugin like <a href="https://wordpress.org/plugins/import-users-from-csv-with-meta/" target="_blank" rel="noopener noreferrer">this one</a>.',
+                ],
+                'file' => [
+                    'type' => 'assets',
+                    'display' => 'CSV Export File',
+                    // 'instructions' => 'Please select or upload your .csv file.',
+                    'container' => $container,
+                    'max_files' => 1,
+                    'required' => true,
                 ],
             ];
         } elseif ($step == 2) {
-            $sections = [
-                'fields' => [
+            $fields = [
+                'section' => [
+                    'type' => 'section',
                     'display' => 'Field Mapping',
-                    'instructions' => 'You can now specify how the data will be imported.',
+                    'instructions' => 'Now you can specify how the data will be imported.',
+                ],
+                'field_mapping' => [
+                    'type' => 'grid',
+                    'display' => 'Required Fields',
+                    'instructions' => 'If you used the recommended plugin for the export, these should have already been filled in for you.',
+                    'classes' => 'wordpress-users-grid',
+                    'reorderable' => false,
                     'fields' => [
-                        'field_mapping' => [
-                            'type' => 'grid',
-                            'display' => 'Required Fields',
-                            'instructions' => 'If you used the recommended plugin for the export, these should have already been filled in for you.',
-                            'classes' => 'wordpress-users-grid',
-                            'reorderable' => false,
-                            'fields' => [
-                                ['handle' => 'column', 'field' => [
-                                    'type' => 'select',
-                                    'display' => 'CSV Column',
-                                    'options' => array_combine($this->csv()->titles, $this->csv()->titles),
-                                    'required' => true,
-                                ]],
-                                ['handle' => 'handle', 'field' => [
-                                    'type' => 'hidden',
-                                ]],
-                                ['handle' => 'title', 'field' => [
-                                    'type' => 'text',
-                                    'display' => 'User Field',
-                                    'read_only' => true,
-                                ]],
-                            ],
-                        ],
-                        'field_mapping_extra' => [
-                            'type' => 'grid',
-                            'display' => 'Custom Fields',
-                            'instructions' => 'You can also import custom data if you want.',
-                            'fields' => [
-                                ['handle' => 'column', 'field' => [
-                                    'type' => 'select',
-                                    'display' => 'CSV Column',
-                                    'options' => array_combine($this->csv()->titles, $this->csv()->titles),
-                                    'required' => true,
-                                ]],
-                                ['handle' => 'handle', 'field' => [
-                                    'type' => 'text',
-                                    'display' => 'Rename (optional)',
-                                    'options' => array_combine($this->csv()->titles, $this->csv()->titles),
-                                    'required' => false,
-                                ]],
-                            ],
-                        ],
+                        ['handle' => 'column', 'field' => [
+                            'type' => 'select',
+                            'display' => 'CSV Column',
+                            'options' => array_combine($this->csv()->titles, $this->csv()->titles),
+                            'required' => true,
+                        ]],
+                        ['handle' => 'handle', 'field' => [
+                            'type' => 'hidden',
+                        ]],
+                        ['handle' => 'title', 'field' => [
+                            'type' => 'text',
+                            'display' => 'User Field',
+                            'read_only' => true,
+                        ]],
+                    ],
+                ],
+                'field_mapping_extra' => [
+                    'type' => 'grid',
+                    'display' => 'Custom Fields',
+                    'instructions' => 'You can also import custom data if you want.',
+                    'fields' => [
+                        ['handle' => 'column', 'field' => [
+                            'type' => 'select',
+                            'display' => 'CSV Column',
+                            'options' => array_combine($this->csv()->titles, $this->csv()->titles),
+                            'required' => true,
+                        ]],
+                        ['handle' => 'handle', 'field' => [
+                            'type' => 'text',
+                            'display' => 'Rename (optional)',
+                            'options' => array_combine($this->csv()->titles, $this->csv()->titles),
+                            'required' => false,
+                        ]],
                     ],
                 ],
             ];
         } elseif ($step == 3) {
-            $sections = [
-                'roles_and_groups' => [
+            $fields = [
+                'section' => [
+                    'type' => 'section',
                     'display' => 'Role Mapping',
                     'instructions' => 'You can optionally map your WordPress roles to any of your Statamic roles and groups.',
+                ],
+                'role_mapping' => [
+                    'type' => 'grid',
+                    'display' => 'Role Mapping',
+                    'instructions' => array_get($this->getValues(3), 'role_mapping')
+                        ? null 
+                        : 'No roles were found in your export file.',
+                    'classes' => 'wordpress-users-grid',
+                    'reorderable' => false,
                     'fields' => [
-                        'role_mapping' => [
-                            'type' => 'grid',
-                            'display' => 'Role Mapping',
-                            'classes' => 'wordpress-users-grid',
-                            'reorderable' => false,
-                            'fields' => [
-                                ['handle' => 'wp_role', 'field' => ['type' => 'text', 'display' => 'WordPress Role', 'read_only' => true]],
-                                ['handle' => 'roles', 'field' => ['type' => 'user_roles', 'display' => 'Roles']],
-                                ['handle' => 'groups', 'field' => ['type' => 'user_groups', 'display' => 'Groups']],
-                            ],
-                        ],
+                        ['handle' => 'wp_role', 'field' => ['type' => 'text', 'display' => 'WordPress Role', 'read_only' => true]],
+                        ['handle' => 'roles', 'field' => ['type' => 'user_roles', 'display' => 'Roles']],
+                        ['handle' => 'groups', 'field' => ['type' => 'user_groups', 'display' => 'Groups']],
                     ],
                 ],
             ];
         }
 
-        return Blueprint::makeFromSections($sections);
+        return Blueprint::makeFromFields($fields);
     }
 
     private function getValues($step)
@@ -321,7 +321,7 @@ class Controller extends BaseController
             ];
         } elseif ($step == 3) {
             $values = [
-                'role_mapping' => collect($this->csv()->data)->pluck('role')->unique()->sort()->values()->map(function ($role) {
+                'role_mapping' => collect($this->csv()->data)->pluck('role')->filter()->unique()->sort()->values()->map(function ($role) {
                     return ['wp_role' => $role];
                 })->all(),
             ];
