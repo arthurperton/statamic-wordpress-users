@@ -10,6 +10,8 @@
         }
     ],
     "require": {
+        "php": ">=7.4",
+        "statamic/cms": ">=3.0",
         "bordoni/phpass": "dev-main",
         "parsecsv/php-parsecsv": "^1.2"
     },
@@ -27,6 +29,11 @@
             "providers": [
                 "Statamic\\Addons\\WordpressUsers\\ServiceProvider"
             ]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pixelfear/composer-dist-plugin": true
         }
     }
 }
