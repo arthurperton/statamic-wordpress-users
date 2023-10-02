@@ -14,4 +14,6 @@
     background-color: inherit !important;
 }
 
-button[type=submit]:not(.btn-wp-users) { display: none; } 
+.wordpress-users-import-form button[type=submit]:not(.btn-wp-users) {
+    display: none;
+} 

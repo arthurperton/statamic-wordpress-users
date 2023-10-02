@@ -1,6 +1,6 @@
 Statamic.$components.register('wordpress-users-import-form', {
     template: `
-        <div>
+        <div class="wordpress-users-import-form">
 
             <publish-form
                 ref="publishForm"
