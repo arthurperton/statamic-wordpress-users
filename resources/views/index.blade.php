@@ -10,7 +10,7 @@
                 <header class="text-center mb-3">
                     <h1 class="mb-3">WordPress Users</h1>
                     <p class="text-grey">You have successfully imported <strong>{{ $userCount }} WordPress
-                            {{ str_plural('users', $userCount) }}</strong> into Statamic. These users can now log in with
+                            {{ str()->plural('users', $userCount) }}</strong> into Statamic. These users can now log in with
                         their WordPress email address and password.</p>
                 </header>
                 <div class="wordpress-users-reminder text-center text-grey mb-3">

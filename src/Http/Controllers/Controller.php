@@ -3,7 +3,9 @@
 namespace Statamic\Addons\WordpressUsers\Http\Controllers;
 
 use App\Http\Controllers\Controller as BaseController;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use ParseCsv\Csv;
 use Statamic\Addons\WordpressUsers\Exceptions\CsvFileException;
@@ -16,6 +18,8 @@ use Statamic\Licensing\LicenseManager as Licenses;
 
 class Controller extends BaseController
 {
+    use AuthorizesRequests;
+
     private const PACKAGE_NAME = 'arthurperton/wordpress-users';
 
     private const PERMISSION = 'access wordpress-users addon';
@@ -280,7 +284,7 @@ class Controller extends BaseController
                 'role_mapping' => [
                     'type' => 'grid',
                     'display' => 'Role Mapping',
-                    'instructions' => array_get($this->getValues(3), 'role_mapping')
+                    'instructions' => Arr::get($this->getValues(3), 'role_mapping')
                         ? null 
                         : 'No roles were found in your export file.',
                     'classes' => 'wordpress-users-grid',
